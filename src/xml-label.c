@@ -195,7 +195,11 @@ gl_xml_label_open (const gchar      *utf8_filename,
 	filename = g_filename_from_utf8 (utf8_filename, -1, NULL, NULL, NULL);
 	g_return_val_if_fail (filename, NULL);
 
+#if LIBXML_VERSION >= 21400
+        doc = xmlReadFile (filename, NULL, XML_PARSE_HUGE | XML_PARSE_UNZIP);
+#else
         doc = xmlReadFile (filename, NULL, XML_PARSE_HUGE);
+#endif
 	if (!doc) {
 		g_message ("xmlParseFile error");
 		*status = XML_LABEL_ERROR_OPEN_PARSE;
